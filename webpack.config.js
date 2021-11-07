@@ -1,3 +1,4 @@
+const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
 
 const phaserModule = path.join(__dirname, '/node_modules/phaser-ce/');
@@ -10,10 +11,17 @@ module.exports = {
     app: path.resolve(__dirname, 'src/app.ts')
   },
   output: {
-    filename: 'app.bundle.js',
+    filename: './src/app.bundle.js',
     path: path.resolve('./dist'),
     publicPath: '/'
   },
+  plugins: [
+    new CopyPlugin({
+      patterns: [
+        { from: './assets', to: './assets' }
+      ]
+    })
+  ],
   module: {
     rules: [
       { test: /\.ts?$/, loader: 'ts-loader', exclude: '/node_modules/' },
