@@ -1,11 +1,4 @@
-import { Game, State, Text } from "phaser-ce";
-
-const enum LoadingState {
-    INITIAL = "",
-    IMAGES = "Images ...",
-    AUDIO = "Audio ...",
-    COMPLETE = "Complete!",
-}
+import { Text, State } from "phaser-ce";
 
 /**
  * TOOD: Consider a Loader singleton that can dynamically
@@ -13,7 +6,6 @@ const enum LoadingState {
  */
 
 class Loading extends State {
-    private loadingState = LoadingState.INITIAL;
     private loadingText: Text;
     private loadingStateText: Text;
 
@@ -31,45 +23,35 @@ class Loading extends State {
                 fontSize: 50,
             }
         );
+        this.loadingText.anchor.set(0.5, 0.5);
 
-        this.loadingStateText = this.game.add.text(
-            this.game.width / 2,
-            this.loadingText.y + this.loadingText.height,
-            LoadingState.INITIAL,
-            {
-                fill: "#FFFFFF",
-                fontSize: 30,
-            }
-        );
+        // Setup loader callbacks ...
 
-        this.loadingText.x -= this.loadingText.width / 2;
-        this.loadingText.y -= this.loadingText.height / 2;
-
-        this.loadingStateText.x -= this.loadingStateText.width / 2;
-        this.loadingStateText.y -= this.loadingStateText.height / 2;
+        this.game.load.onLoadStart.add(this.loadStart, this);
+        this.game.load.onFileComplete.add(this.fileComplete, this);
+        this.game.load.onLoadComplete.add(this.loadComplete, this);
 
         // Organize your assets here ...
 
-        // DELETE ME ...
-        // Just experimenting with loading state ...
-        setTimeout(() => {
-            this.loadingStateText.setText(`Loading ${LoadingState.IMAGES}`);
-            this.loadingStateText.x =
-                this.game.width / 2 - this.loadingStateText.width / 2;
-        }, 1000);
-        setTimeout(() => {
-            this.loadingStateText.setText(`Loading ${LoadingState.AUDIO}`);
-            this.loadingStateText.x =
-                this.game.width / 2 - this.loadingStateText.width / 2;
-        }, 2000);
-        setTimeout(() => {
-            this.loadingStateText.setText(`Loading ${LoadingState.COMPLETE}`);
-            this.loadingStateText.x =
-                this.game.width / 2 - this.loadingStateText.width / 2;
-        }, 3000);
-        setTimeout(() => {
-            console.log("Start Game!");
-        }, 5000);
+        this.game.load.image("default", "../assets/default.png");
+
+        // Begin load ...
+
+        this.game.load.start();
+    }
+
+    private loadStart() {
+        console.log("Started Loading ...");
+    }
+
+    private fileComplete(progress: number) {
+        console.log(`Game is %${progress} complete ...`);
+    }
+
+    private loadComplete() {
+        console.log("Loading done! Starting game ...");
+
+        this.game.state.start("game");
     }
 }
 
