@@ -5,7 +5,7 @@
     "main": "index.js",
     "scripts": {
         "build": "webpack",
-        "server": "npx live-server --port=1234",
+        "server": "live-server --port=1234",
         "webpack": "webpack --watch"
     },
     "author": "Nathan Nahi",
@@ -16,6 +16,7 @@
     "devDependencies": {
         "copy-webpack-plugin": "^9.0.1",
         "expose-loader": "^3.1.0",
+        "live-server": "^1.2.1",
         "prettier": "^2.4.1",
         "ts-loader": "^9.2.6",
         "typescript": "^4.4.4",
